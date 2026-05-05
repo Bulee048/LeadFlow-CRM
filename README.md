@@ -79,4 +79,4 @@ From a product perspective, I focused on features that solve actual sales fricti
 If I were to iterate further, I would implement **Lead Enrichment APIs** (to automatically pull company data from domains) and a **Calendar Integration** for scheduling follow-ups directly within the timeline.
 
 ---
-*Developed as a Take-Home Assessment for [Internship Position]*
+**Nethshan Dulmin Bulegoda**
