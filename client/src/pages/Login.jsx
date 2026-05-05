@@ -94,9 +94,7 @@ const Login = () => {
           </form>
         </div>
         
-        <p className="text-center mt-8 text-indigo-100 text-sm opacity-60">
-          &copy; 2024 LeadFlow Systems Inc. All rights reserved.
-        </p>
+
       </div>
     </div>
 
