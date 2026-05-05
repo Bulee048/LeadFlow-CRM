@@ -156,6 +156,7 @@ const EditLead = () => {
                  type="number"
                  step="0.01"
                  {...register('deal_value', { valueAsNumber: true })}
+                 onFocus={(e) => e.target.select()}
                  className="input-field pl-10 font-mono"
                />
             </div>

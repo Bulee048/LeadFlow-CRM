@@ -35,24 +35,24 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <aside 
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-0'
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col overflow-y-auto">
           {/* Logo */}
-          <div className="p-6 flex items-center gap-3">
+          <div className="p-6 flex items-center gap-3 shrink-0">
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-200">
               LF
             </div>
-            <span className="font-bold text-xl tracking-tight">LeadFlow</span>
+            <span className="font-bold text-xl tracking-tight text-gray-900">LeadFlow</span>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 space-y-1">
+          <nav className="flex-1 px-4 space-y-1 py-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
           </nav>
 
           {/* User Profile */}
-          <div className="p-4 border-t border-gray-100">
+          <div className="p-4 border-t border-gray-100 shrink-0">
             <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl mb-4">
               <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
                 {user?.name?.charAt(0) || 'U'}
@@ -96,9 +96,9 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* Topbar */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30">
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 shrink-0 z-30">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -115,8 +115,10 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main className="p-4 lg:p-8 overflow-y-auto">
-          {children}
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-8 scroll-smooth">
+          <div className="max-w-[1600px] mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>

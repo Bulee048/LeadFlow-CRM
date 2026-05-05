@@ -13,7 +13,7 @@ const CreateLead = () => {
     defaultValues: {
       status: 'New',
       lead_source: 'Website',
-      deal_value: 0
+      deal_value: ''
     }
   });
 
@@ -190,6 +190,7 @@ const CreateLead = () => {
                  type="number"
                  step="0.01"
                  {...register('deal_value', { valueAsNumber: true })}
+                 onFocus={(e) => e.target.select()}
                  className="input-field pl-10 font-mono"
                  placeholder="0.00"
                />
