@@ -47,9 +47,18 @@ const Leads = () => {
       if (filters.search) params.append('search', filters.search);
 
       const res = await api.get(`/leads?${params.toString()}`);
-      setLeads(res.data);
+      if (Array.isArray(res.data)) {
+        setLeads(res.data);
+      } else {
+        console.error('API returned non-array data:', res.data);
+        setLeads([]);
+      }
     } catch (err) {
-      toast.error('Failed to fetch leads');
+      // Only show error if it's not a cancelled request
+      if (err.name !== 'CanceledError') {
+        console.error('Failed to fetch leads', err);
+        toast.error('Failed to fetch leads. Please check your connection.');
+      }
     } finally {
       setLoading(false);
     }
@@ -300,7 +309,7 @@ const Leads = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="px-6 py-20 text-center">
+                  <td colSpan="8" className="px-6 py-20 text-center">
                      <div className="flex flex-col items-center gap-2">
                         <div className="p-4 bg-gray-50 rounded-full text-gray-400">
                            <Search size={40} />
@@ -324,7 +333,7 @@ const Leads = () => {
                   <td className="px-6 py-4 text-indigo-700 text-lg">
                     {new Intl.NumberFormat('en-LK', { style: 'currency', currency: 'LKR' }).format(totalValue)}
                   </td>
-                  <td colSpan="3"></td>
+                  <td colSpan="4"></td>
                 </tr>
               </tfoot>
             )}

@@ -17,10 +17,19 @@ const CreateLead = () => {
     }
   });
 
+  let emailCheckController = null;
+
   const checkDuplicateEmail = async (email) => {
     if (!email) return;
+    
+    // Cancel previous check if it exists
+    if (emailCheckController) emailCheckController.abort();
+    emailCheckController = new AbortController();
+
     try {
-      const res = await api.get(`/leads?search=${email}`);
+      const res = await api.get(`/leads?search=${email}`, { 
+        signal: emailCheckController.signal 
+      });
       const duplicates = res.data.filter(l => l.email.toLowerCase() === email.toLowerCase());
       if (duplicates.length > 0) {
         setEmailWarning(`Warning: A lead with this email already exists (${duplicates[0].lead_name} at ${duplicates[0].company_name})`);
@@ -28,7 +37,9 @@ const CreateLead = () => {
         setEmailWarning('');
       }
     } catch (err) {
-      console.error('Email check failed', err);
+      if (err.name !== 'CanceledError') {
+        console.error('Email check failed', err);
+      }
     }
   };
 
