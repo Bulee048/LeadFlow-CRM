@@ -12,7 +12,9 @@ import {
   MessageSquare,
   History,
   Send,
-  Plus
+  Plus,
+  ChevronRight,
+  CheckCircle2
 } from 'lucide-react';
 import api from '../api/axios';
 import { format } from 'date-fns';
@@ -100,10 +102,21 @@ const LeadDetail = () => {
     }
   };
 
-  if (loading) return <div className="animate-pulse space-y-6">
-    <div className="h-8 w-48 bg-gray-200 rounded"></div>
-    <div className="h-64 bg-gray-200 rounded-xl"></div>
-  </div>;
+  if (loading) return (
+    <div className="animate-pulse space-y-6">
+      <div className="h-8 w-48 bg-surface-200 rounded"></div>
+      <div className="h-64 bg-white rounded-xl border border-surface-200 shadow-card"></div>
+    </div>
+  );
+
+  if (!lead) return (
+    <div className="flex flex-col items-center justify-center h-64 bg-white rounded-xl border border-surface-200 shadow-card">
+      <p className="text-surface-500 font-medium">Lead not found or failed to load.</p>
+      <Link to="/leads" className="mt-4 text-brand-600 font-semibold hover:text-brand-700 text-sm">
+        Back to Leads
+      </Link>
+    </div>
+  );
 
   const statuses = ['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Won', 'Lost'];
 
@@ -192,15 +205,20 @@ const LeadDetail = () => {
                   </div>
                </div>
                
-               <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                  <span className="text-xs font-bold text-gray-500 pl-2">Update Status:</span>
-                  <select 
-                    className="bg-white border border-gray-200 rounded-lg text-sm font-semibold px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
-                    value={lead.status}
-                    onChange={(e) => handleStatusChange(e.target.value)}
-                  >
-                    {statuses.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
+               <div className="flex items-center gap-3 bg-surface-50 p-1.5 rounded-xl border border-surface-100">
+                  <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest pl-2">Update Status:</span>
+                  <div className="relative group/select min-w-[140px]">
+                    <select 
+                      className="appearance-none block w-full pl-3 pr-8 py-2 text-sm font-bold text-surface-700 bg-white border border-surface-200 rounded-lg cursor-pointer hover:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all shadow-sm"
+                      value={lead.status}
+                      onChange={(e) => handleStatusChange(e.target.value)}
+                    >
+                      {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-surface-400 group-hover/select:text-brand-500">
+                       <ChevronRight size={14} className="rotate-90" />
+                    </div>
+                  </div>
                </div>
             </div>
 
@@ -257,7 +275,7 @@ const LeadDetail = () => {
                </div>
 
                {/* Notes from Lead */}
-               {lead.notes.map((note) => (
+               {Array.isArray(lead.notes) && lead.notes.map((note) => (
                   <div key={note.id} className="relative pl-12 group">
                     <div className="absolute left-0 top-0 w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full border-4 border-white flex items-center justify-center shadow-sm">
                        <MessageSquare size={16} />

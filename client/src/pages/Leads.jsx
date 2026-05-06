@@ -10,6 +10,9 @@ import {
   Trash2, 
   MoreVertical,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
   X
 } from 'lucide-react';
 import api from '../api/axios';
@@ -142,19 +145,19 @@ const Leads = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Leads Management</h2>
-          <p className="text-sm text-gray-500">Manage and track your sales opportunities</p>
+          <h2 className="text-xl font-bold text-surface-900">Leads Management</h2>
+          <p className="text-sm text-surface-400">Manage and track your sales opportunities</p>
         </div>
         <div className="flex gap-3">
           <button 
             onClick={exportCSV}
-            className="btn-secondary flex items-center gap-2"
+            className="btn-secondary"
           >
-            <Download size={18} />
+            <Download size={16} />
             <span>Export CSV</span>
           </button>
-          <Link to="/leads/new" className="btn-primary flex items-center gap-2">
-            <Plus size={18} />
+          <Link to="/leads/new" className="btn-primary">
+            <Plus size={16} />
             <span>Add Lead</span>
           </Link>
         </div>
@@ -164,11 +167,11 @@ const Leads = () => {
       <div className="card">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" size={16} />
             <input 
               type="text" 
               placeholder="Search leads..." 
-              className="input-field pl-10"
+              className="input-field pl-9"
               value={debouncedSearch}
               onChange={(e) => setDebouncedSearch(e.target.value)}
             />
@@ -206,102 +209,134 @@ const Leads = () => {
               setFilters({ status: '', lead_source: '', assigned_to: '', search: '' });
               setDebouncedSearch('');
             }}
-            className="btn-secondary flex items-center justify-center gap-2 text-red-600 border-red-100 hover:bg-red-50"
+            className="btn-secondary text-danger-600 border-danger-100 hover:bg-danger-50 hover:border-danger-200"
           >
-            <X size={18} />
-            <span>Clear Filters</span>
+            <X size={16} />
+            <span>Clear</span>
           </button>
         </div>
       </div>
 
       {/* Leads Table */}
-      <div className="card p-0 overflow-hidden">
+      <div className="bg-white rounded-xl border border-surface-200 shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Lead Name</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Company</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Deal Value</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Assigned To</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Status History</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Engagement</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
+            <thead>
+              <tr className="border-b border-surface-100">
+                <th className="table-header">Lead</th>
+                <th className="table-header">Company</th>
+                <th className="table-header">Status</th>
+                <th className="table-header">Deal Value</th>
+                <th className="table-header">Assigned To</th>
+                <th className="table-header">Age</th>
+                <th className="table-header">Engagement</th>
+                <th className="table-header text-right pr-5">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-surface-50">
               {loading ? (
                 [1, 2, 3, 4, 5].map(i => (
                   <tr key={i} className="animate-pulse">
-                    <td colSpan="8" className="px-6 py-4 bg-gray-50/50"></td>
+                    {[1,2,3,4,5,6,7,8].map(j => (
+                      <td key={j} className="px-5 py-4">
+                        <div className="h-4 bg-surface-100 rounded-md" />
+                      </td>
+                    ))}
                   </tr>
                 ))
               ) : leads.length > 0 ? (
                 leads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-gray-900">{lead.lead_name}</span>
-                        <span className="text-xs text-gray-500">{lead.email}</span>
+                  <tr 
+                    key={lead.id} 
+                    className="hover:bg-surface-50 transition-colors group cursor-pointer"
+                    onClick={() => navigate(`/leads/${lead.id}`)}
+                  >
+                    <td className="table-cell">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs uppercase flex-shrink-0">
+                          {lead.lead_name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-surface-900 text-sm">{lead.lead_name}</p>
+                          <p className="text-xs text-surface-400">{lead.email}</p>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{lead.company_name}</td>
-                    <td className="px-6 py-4">
-                      <select 
-                        className="bg-transparent border-none text-xs font-semibold focus:ring-0 cursor-pointer p-0"
-                        value={lead.status}
-                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                      >
-                        {statuses.map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
-                      <div className="mt-1">
+                    <td className="table-cell text-surface-600">{lead.company_name}</td>
+                    <td className="table-cell">
+                      <div className="space-y-1.5" onClick={(e) => e.stopPropagation()}>
                         <LeadStatusBadge status={lead.status} />
+                        <div className="relative group/select">
+                          <select 
+                            className="appearance-none block w-full pl-2 pr-8 py-1.5 text-[11px] font-bold text-surface-600 bg-surface-50 border border-surface-200 rounded-md cursor-pointer hover:bg-white hover:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all"
+                            value={lead.status}
+                            onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                          >
+                            {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                          <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-surface-400 group-hover/select:text-brand-500">
+                             <ChevronRight size={12} className="rotate-90" />
+                          </div>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-bold text-gray-900">
-                      {new Intl.NumberFormat('en-LK', { style: 'currency', currency: 'LKR' }).format(lead.deal_value)}
+                    <td className="table-cell font-bold text-surface-900">
+                      {new Intl.NumberFormat('en-LK', { style: 'currency', currency: 'LKR', maximumFractionDigits: 0 }).format(lead.deal_value)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {lead.assigned_to || '-'}
+                    <td className="table-cell text-surface-600">
+                      {lead.assigned_to || <span className="text-surface-300">—</span>}
                     </td>
-                    <td className="px-6 py-4">
-                       <div className="flex flex-col">
-                         <span className={`text-sm font-medium ${getAgeColor(lead.created_at)}`}>
-                           {differenceInDays(new Date(), new Date(lead.created_at))} days age
-                         </span>
-                         <span className="text-[10px] text-gray-400 font-bold uppercase">
-                           Updated {format(new Date(lead.updated_at), 'MMM dd')}
-                         </span>
-                       </div>
+                    <td className="table-cell">
+                      <div>
+                        <span className={`text-xs font-semibold ${getAgeColor(lead.created_at)}`}>
+                          {differenceInDays(new Date(), new Date(lead.created_at))}d
+                        </span>
+                        <p className="text-[11px] text-surface-400 mt-0.5">
+                          {format(new Date(lead.updated_at), 'MMM dd')}
+                        </p>
+                      </div>
                     </td>
-                    <td className="px-6 py-4">
-                       <div className="flex items-center gap-1.5">
-                          {[1, 2, 3, 4, 5].map((star) => {
-                             const score = Math.min(Math.floor((lead.notes?.length || 0) / 2) + 1, 5);
-                             return (
-                               <div 
-                                 key={star} 
-                                 className={`w-1.5 h-3 rounded-full ${star <= score ? 'bg-indigo-500' : 'bg-gray-100'}`}
-                               ></div>
-                             );
-                          })}
-                          <span className="text-[10px] font-black text-gray-400 ml-1 uppercase">Engage</span>
-                       </div>
+                    <td className="table-cell">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => {
+                          const score = Math.min(Math.floor((lead.notes?.length || 0) / 2) + 1, 5);
+                          return (
+                            <div 
+                              key={star} 
+                              className={`w-1.5 h-4 rounded-full ${star <= score ? 'bg-brand-500' : 'bg-surface-100'}`}
+                            />
+                          );
+                        })}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <Link to={`/leads/${lead.id}`} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
-                          <Eye size={18} />
-                        </Link>
-                        <Link to={`/leads/${lead.id}/edit`} className="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all">
-                          <Pencil size={18} />
-                        </Link>
+                    <td className="table-cell">
+                      <div className="flex justify-end gap-1">
                         <button 
-                          onClick={() => handleDelete(lead.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/leads/${lead.id}`);
+                          }}
+                          className="p-1.5 text-surface-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-all"
                         >
-                          <Trash2 size={18} />
+                          <Eye size={16} />
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/leads/${lead.id}/edit`);
+                          }}
+                          className="p-1.5 text-surface-400 hover:text-warning-600 hover:bg-warning-50 rounded-lg transition-all"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(lead.id);
+                          }}
+                          className="p-1.5 text-surface-400 hover:text-danger-600 hover:bg-danger-50 rounded-lg transition-all"
+                        >
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     </td>
@@ -310,28 +345,28 @@ const Leads = () => {
               ) : (
                 <tr>
                   <td colSpan="8" className="px-6 py-20 text-center">
-                     <div className="flex flex-col items-center gap-2">
-                        <div className="p-4 bg-gray-50 rounded-full text-gray-400">
-                           <Search size={40} />
-                        </div>
-                        <p className="text-gray-500 font-medium">No leads found matching your filters.</p>
-                        <button 
-                          onClick={() => setFilters({ status: '', lead_source: '', assigned_to: '', search: '' })}
-                          className="text-indigo-600 text-sm font-bold mt-2"
-                        >
-                          Clear all filters
-                        </button>
-                     </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="p-4 bg-surface-100 rounded-xl text-surface-400">
+                        <Search size={32} />
+                      </div>
+                      <p className="text-surface-500 font-medium text-sm">No leads found matching your filters.</p>
+                      <button 
+                        onClick={() => setFilters({ status: '', lead_source: '', assigned_to: '', search: '' })}
+                        className="text-brand-600 text-sm font-semibold hover:text-brand-700"
+                      >
+                        Clear all filters
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )}
             </tbody>
             {leads.length > 0 && (
-              <tfoot className="bg-gray-50 font-bold border-t border-gray-100">
+              <tfoot className="bg-surface-50 border-t border-surface-100">
                 <tr>
-                  <td colSpan="3" className="px-6 py-4 text-right text-gray-500">Total Pipeline Value:</td>
-                  <td className="px-6 py-4 text-indigo-700 text-lg">
-                    {new Intl.NumberFormat('en-LK', { style: 'currency', currency: 'LKR' }).format(totalValue)}
+                  <td colSpan="3" className="px-5 py-4 text-right text-xs font-bold text-surface-500 uppercase tracking-wider">Total Pipeline Value:</td>
+                  <td className="px-5 py-4 text-brand-700 font-bold text-sm">
+                    {new Intl.NumberFormat('en-LK', { style: 'currency', currency: 'LKR', maximumFractionDigits: 0 }).format(totalValue)}
                   </td>
                   <td colSpan="4"></td>
                 </tr>

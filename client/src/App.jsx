@@ -30,17 +30,15 @@ const App = () => {
           
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route element={<Layout children={<Navigate to="/dashboard" />} />}>
-              {/* This is just a shell for protected routes with layout */}
+            <Route element={<Layout />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="leads" element={<Leads />} />
+              <Route path="leads/new" element={<CreateLead />} />
+              <Route path="leads/:id" element={<LeadDetail />} />
+              <Route path="leads/:id/edit" element={<EditLead />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
-            
-            <Route path="/" element={<Layout><Dashboard /></Layout>} />
-            <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-            <Route path="/leads" element={<Layout><Leads /></Layout>} />
-            <Route path="/leads/new" element={<Layout><CreateLead /></Layout>} />
-            <Route path="/leads/:id" element={<Layout><LeadDetail /></Layout>} />
-            <Route path="/leads/:id/edit" element={<Layout><EditLead /></Layout>} />
-            <Route path="/profile" element={<Layout><Profile /></Layout>} />
           </Route>
 
           {/* Fallback */}
