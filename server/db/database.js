@@ -101,9 +101,9 @@ const dbInterface = {
           if (query.includes('LIKE ?')) {
             const search = params[paramIdx].replace(/%/g, '').toLowerCase();
             results = results.filter(l => 
-              l.lead_name.toLowerCase().includes(search) || 
-              l.company_name.toLowerCase().includes(search) || 
-              l.email.toLowerCase().includes(search)
+              (l.lead_name || '').toLowerCase().includes(search) || 
+              (l.company_name || '').toLowerCase().includes(search) || 
+              (l.email || '').toLowerCase().includes(search)
             );
           }
 
@@ -111,6 +111,14 @@ const dbInterface = {
         }
         if (query.includes('SELECT * FROM notes WHERE lead_id = ?')) {
           return data.notes.filter(n => n.lead_id == params[0]).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+        }
+        if (query.includes('SELECT lead_source, COUNT(*) as count FROM leads GROUP BY lead_source')) {
+          const counts = {};
+          data.leads.forEach(l => {
+            const source = l.lead_source || 'Unknown';
+            counts[source] = (counts[source] || 0) + 1;
+          });
+          return Object.entries(counts).map(([lead_source, count]) => ({ lead_source, count }));
         }
         return [];
       },

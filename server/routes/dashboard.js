@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 router.get('/', auth, async (req, res) => {
   try {
     const [
-      total, newL, qualified, won, lost, contacted, proposal, totalVal, wonVal
+      total, newL, qualified, won, lost, contacted, proposal, totalVal, wonVal, sources
     ] = await Promise.all([
       db.prepare('SELECT COUNT(*) as count FROM leads').get(),
       db.prepare("SELECT COUNT(*) as count FROM leads WHERE status = 'New'").get(),
@@ -17,7 +17,8 @@ router.get('/', auth, async (req, res) => {
       db.prepare("SELECT COUNT(*) as count FROM leads WHERE status = 'Contacted'").get(),
       db.prepare("SELECT COUNT(*) as count FROM leads WHERE status = 'Proposal Sent'").get(),
       db.prepare('SELECT SUM(deal_value) as sum FROM leads').get(),
-      db.prepare("SELECT SUM(deal_value) as sum FROM leads WHERE status = 'Won'").get()
+      db.prepare("SELECT SUM(deal_value) as sum FROM leads WHERE status = 'Won'").get(),
+      db.prepare("SELECT lead_source, COUNT(*) as count FROM leads GROUP BY lead_source").all()
     ]);
 
     res.json({
@@ -29,7 +30,8 @@ router.get('/', auth, async (req, res) => {
       contacted_leads: contacted?.count || 0,
       proposal_sent_leads: proposal?.count || 0,
       total_deal_value: totalVal?.sum || 0,
-      won_deal_value: wonVal?.sum || 0
+      won_deal_value: wonVal?.sum || 0,
+      sources: sources || []
     });
   } catch (err) {
     console.error(err);

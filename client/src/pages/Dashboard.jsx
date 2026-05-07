@@ -42,6 +42,9 @@ const Dashboard = () => {
     };
 
     fetchData();
+    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -226,39 +229,47 @@ const Dashboard = () => {
           
           <div className="p-6">
             <div className="relative space-y-2.5 max-w-2xl mx-auto">
-              {[
-                { label: 'Total Leads',   count: stats?.total_leads,          color: '#2563eb', width: '100%' },
-                { label: 'Contacted',     count: stats?.contacted_leads,      color: '#3b82f6', width: '80%' },
-                { label: 'Qualified',     count: stats?.qualified_leads,      color: '#8b5cf6', width: '62%' },
-                { label: 'Proposal Sent', count: stats?.proposal_sent_leads,  color: '#f97316', width: '46%' },
-                { label: 'Won',           count: stats?.won_leads,            color: '#22c55e', width: '32%' },
-              ].map((stage, i) => (
-                <div key={stage.label} className="flex items-center gap-4">
-                  <div className="w-28 text-[11px] font-bold text-surface-400 uppercase tracking-wider text-right flex-shrink-0">{stage.label}</div>
-                  <div className="flex-1 h-9 relative">
-                    <div 
-                      className="h-full rounded-lg flex items-center justify-end px-4 text-white text-sm font-bold transition-all duration-700 hover:brightness-110"
-                      style={{ 
-                        width: stage.width, 
-                        backgroundColor: stage.color,
-                        opacity: 1 - (i * 0.08)
-                      }}
-                    >
-                      {stage.count ?? 0}
+              {(() => {
+                const stages = [
+                  { label: 'Total Leads',   count: stats?.total_leads || 0,          color: '#2563eb' },
+                  { label: 'New Leads',     count: stats?.new_leads || 0,            color: '#3b82f6' },
+                  { label: 'Contacted',     count: stats?.contacted_leads || 0,      color: '#0ea5e9' },
+                  { label: 'Qualified',     count: stats?.qualified_leads || 0,      color: '#8b5cf6' },
+                  { label: 'Proposal Sent', count: stats?.proposal_sent_leads || 0,  color: '#f97316' },
+                  { label: 'Won',           count: stats?.won_leads || 0,            color: '#22c55e' },
+                  { label: 'Lost',          count: stats?.lost_leads || 0,           color: '#ef4444' },
+                ].sort((a, b) => b.count - a.count);
+
+                const maxCount = Math.max(...stages.map(s => s.count), 1);
+
+                return stages.map((stage, i) => (
+                  <div key={stage.label} className="flex items-center gap-4">
+                    <div className="w-28 text-[11px] font-bold text-surface-400 uppercase tracking-wider text-right flex-shrink-0">{stage.label}</div>
+                    <div className="flex-1 h-9 relative">
+                      <div 
+                        className="h-full rounded-lg flex items-center justify-end px-4 text-white text-sm font-bold transition-all duration-700 hover:brightness-110"
+                        style={{ 
+                          width: `${(stage.count / maxCount) * 100}%`, 
+                          backgroundColor: stage.color,
+                          opacity: 1 - (i * 0.05)
+                        }}
+                      >
+                        {stage.count}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ));
+              })()}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 mt-10 pt-7 border-t border-surface-100">
-              {['Website', 'LinkedIn', 'Referral', 'Cold Email', 'Event', 'Other'].map(source => {
-                const count = recentLeads.filter(l => l.lead_source === source).length;
-                const percentage = recentLeads.length > 0 ? (count / recentLeads.length) * 100 : 0;
+              {(stats?.sources || []).sort((a, b) => b.count - a.count).map(source => {
+                const count = source.count;
+                const percentage = stats.total_leads > 0 ? (count / stats.total_leads) * 100 : 0;
                 return (
-                  <div key={source} className="space-y-2">
+                  <div key={source.lead_source} className="space-y-2">
                     <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest">{source}</span>
+                      <span className="text-[10px] font-bold text-surface-400 uppercase tracking-widest">{source.lead_source || 'Unknown'}</span>
                       <span className="text-xs font-bold text-surface-700">{count}</span>
                     </div>
                     <div className="h-1.5 w-full bg-surface-100 rounded-full overflow-hidden">

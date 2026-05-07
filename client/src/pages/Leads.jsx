@@ -60,7 +60,6 @@ const Leads = () => {
       // Only show error if it's not a cancelled request
       if (err.name !== 'CanceledError') {
         console.error('Failed to fetch leads', err);
-        toast.error('Failed to fetch leads. Please check your connection.');
       }
     } finally {
       setLoading(false);

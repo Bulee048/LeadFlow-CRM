@@ -18,6 +18,8 @@ router.get('/', verifyToken, (req, res) => {
     const totalValue = (db.prepare('SELECT SUM(deal_value) as sum FROM leads').get() as any).sum || 0;
     const wonValue = (db.prepare("SELECT SUM(deal_value) as sum FROM leads WHERE status = 'Won'").get() as any).sum || 0;
 
+    const sources = db.prepare('SELECT lead_source, COUNT(*) as count FROM leads GROUP BY lead_source').all();
+    
     res.json({
       total_leads: totalLeads,
       new_leads: newLeads,
@@ -27,7 +29,8 @@ router.get('/', verifyToken, (req, res) => {
       won_leads: wonLeads,
       lost_leads: lostLeads,
       total_deal_value: totalValue,
-      won_deal_value: wonValue
+      won_deal_value: wonValue,
+      sources: sources
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching dashboard stats' });

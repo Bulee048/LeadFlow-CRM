@@ -10,26 +10,133 @@
   ],
   "leads": [
     {
-      "id": 1778069352616,
-      "lead_name": "abc",
-      "company_name": "Asus",
-      "email": "abc@gmail.com",
-      "phone": "2546784569",
-      "lead_source": "Website",
-      "assigned_to": "kef",
+      "id": 1001,
+      "lead_name": "Sarah Jenkins",
+      "company_name": "CloudScale Solutions",
+      "email": "s.jenkins@cloudscale.io",
+      "phone": "+94 77 123 4567",
+      "lead_source": "LinkedIn",
+      "assigned_to": "Admin User",
       "status": "New",
+      "deal_value": 450000,
+      "created_at": "2026-05-07T08:30:00.000Z",
+      "updated_at": "2026-05-07T08:30:00.000Z"
+    },
+    {
+      "id": 1002,
+      "lead_name": "Michael Chen",
+      "company_name": "Apex Manufacturing",
+      "email": "m.chen@apex-mfg.com",
+      "phone": "+94 11 234 5678",
+      "lead_source": "Referral",
+      "assigned_to": "Admin User",
+      "status": "Qualified",
+      "deal_value": 1250000,
+      "created_at": "2026-05-06T14:15:00.000Z",
+      "updated_at": "2026-05-07T09:45:00.000Z"
+    },
+    {
+      "id": 1003,
+      "lead_name": "Jessica Williams",
+      "company_name": "Global Logistics",
+      "email": "jessica.w@globlogistics.net",
+      "phone": "+94 71 987 6543",
+      "lead_source": "Website",
+      "assigned_to": "Admin User",
+      "status": "Won",
+      "deal_value": 850000,
+      "created_at": "2026-05-05T10:00:00.000Z",
+      "updated_at": "2026-05-07T11:20:00.000Z"
+    },
+    {
+      "id": 1004,
+      "lead_name": "David Miller",
+      "company_name": "Skyline Architects",
+      "email": "d.miller@skyline-arch.com",
+      "phone": "+94 72 444 5555",
+      "lead_source": "Event",
+      "assigned_to": "Admin User",
+      "status": "Proposal Sent",
+      "deal_value": 620000,
+      "created_at": "2026-05-04T09:00:00.000Z",
+      "updated_at": "2026-05-07T13:45:00.000Z"
+    },
+    {
+      "id": 1005,
+      "lead_name": "Amanda Reed",
+      "company_name": "EcoTech Systems",
+      "email": "amanda@ecotech.biz",
+      "phone": "+94 76 111 2222",
+      "lead_source": "Cold Email",
+      "assigned_to": "Admin User",
+      "status": "Qualified",
+      "deal_value": 310000,
+      "created_at": "2026-05-07T10:30:00.000Z",
+      "updated_at": "2026-05-07T08:20:38.320Z"
+    },
+    {
+      "id": 1778141976966,
+      "lead_name": "Asus",
+      "company_name": "Asus",
+      "email": "asusraveesh@gmail.com",
+      "phone": "1234567890",
+      "lead_source": "Website",
+      "assigned_to": "sarah",
+      "status": "Contacted",
       "deal_value": 10000,
-      "created_at": "2026-05-06T12:09:12.616Z",
-      "updated_at": "2026-05-06T12:20:06.635Z"
+      "created_at": "2026-05-07T08:19:36.966Z",
+      "updated_at": "2026-05-07T08:19:36.966Z"
     }
   ],
   "notes": [
     {
-      "id": 1778069433371,
-      "lead_id": "1778069352616",
-      "content": "asdf",
+      "id": 2001,
+      "lead_id": "1002",
+      "content": "Initial discovery call completed. Customer is interested in our enterprise plan.",
       "created_by": "Admin User",
-      "created_at": "2026-05-06T12:10:33.371Z"
+      "created_at": "2026-05-06T15:30:00.000Z"
+    },
+    {
+      "id": 2002,
+      "lead_id": "1002",
+      "content": "Sent over the technical requirements document for their review.",
+      "created_by": "Admin User",
+      "created_at": "2026-05-07T09:45:00.000Z"
+    },
+    {
+      "id": 2003,
+      "lead_id": "1003",
+      "content": "Contract signed and first payment received. Onboarding scheduled for next week.",
+      "created_by": "Admin User",
+      "created_at": "2026-05-07T11:20:00.000Z"
+    },
+    {
+      "id": 2004,
+      "lead_id": "1004",
+      "content": "Met at the Tech Expo. They are looking to overhaul their client portal.",
+      "created_by": "Admin User",
+      "created_at": "2026-05-04T16:00:00.000Z"
+    },
+    {
+      "id": 2005,
+      "lead_id": "1004",
+      "content": "Custom proposal sent. Scheduled a follow-up for next Tuesday.",
+      "created_by": "Admin User",
+      "created_at": "2026-05-07T13:45:00.000Z"
+    },
+    {
+      "id": 2006,
+      "lead_id": "1005",
+      "content": "Replied to our cold outreach. Requested a product brochure.",
+      "created_by": "Admin User",
+      "created_at": "2026-05-07T14:10:00.000Z"
+    },
+    {
+      "id": 1778142049631,
+      "lead_id": "1005",
+      "content": "updated",
+      "created_by": "Admin User",
+      "created_at": "2026-05-07T08:20:49.631Z"
     }
   ]
 }
