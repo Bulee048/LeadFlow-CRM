@@ -104,6 +104,11 @@ A modern, enterprise-grade Customer Relationship Management (CRM) platform desig
    npm run dev
    ```
 
+6. **Login to the Application:**
+   Once the application is running, you can log in using the default seeded admin credentials:
+   - **Email:** `admin@gmail.com`
+   - **Password:** `password`
+
 ---
 
 ## 💡 Business Value (For Business Analysts)
