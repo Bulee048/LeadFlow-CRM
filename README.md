@@ -1,82 +1,114 @@
-# LeadFlow CRM - Production-Quality Lead Management System
+# LeadFlow CRM 🚀
 
-LeadFlow CRM is a modern, high-performance lead management system designed for sales teams to track opportunities, manage client interactions, and visualize pipeline health. Built with a focus on **Sales Velocity** and **User Experience**, it provides a streamlined workflow for converting leads into customers.
+A modern, enterprise-grade Customer Relationship Management (CRM) platform designed to streamline sales pipelines, visualize data, and manage leads in real-time. Built with a focus on performance, security, and a premium User Experience.
 
-## 🚀 Tech Stack
-
-- **Frontend**: React (Vite) + Tailwind CSS
-- **Backend**: Node.js + Express
-- **Database**: Custom JSON-based Persistent Storage (Implemented for maximum portability and zero-setup during review).
-- **Auth**: JWT (jsonwebtoken) + bcryptjs
-- **Icons**: Lucide React
-- **Date Handling**: date-fns
-- **Notifications**: React Hot Toast
-- **Form Management**: React Hook Form
+---
 
 ## ✨ Key Features
 
-- **Secure Authentication**: JWT-based login with persistent sessions and a protected route architecture.
-- **Visual Sales Funnel**: A dynamic dashboard visualization showing lead conversion across pipeline stages.
-- **Advanced Lead Management**:
-  - Full CRUD operations with detailed lead profiles.
-  - Multi-parameter filtering (Status, Source, Assignee) and debounced real-time search.
-  - **Activity Timeline**: A unified history of lead creation and team interactions/notes.
-  - **Pipeline Stepper**: Visual progress tracking on individual lead pages.
-- **Bonus Features (Product Thinking)**:
-  - **Engagement Scoring**: A visual indicator of lead interaction frequency to help prioritize high-intent prospects.
-  - **Duplicate Email Detection**: Real-time warning during lead creation to prevent data fragmentation.
-  - **CSV Export**: One-click data portability for filtered lead lists.
-  - **Activity Alerts**: Color-coded "Days in Pipeline" tracking to identify stagnant leads.
+### 📊 Executive Analytics & Reporting
+- **Interactive Dashboards:** Real-time data visualization using **Recharts** to track pipeline health, win rates, and lead acquisition sources.
+- **Instant Exporting:** One-click PDF report generation designed specifically for stakeholder and BA reporting.
 
-## 🛠️ How to Run Locally
+### 🔄 Real-Time Collaboration
+- **WebSocket Integration:** Powered by `Socket.io`, any updates made to a lead's status are instantly broadcasted to all connected clients without needing a page refresh.
+
+### 📋 Kanban Pipeline Management
+- **Drag-and-Drop Interface:** Easily transition leads through the sales funnel (New → Contacted → Qualified → Won/Lost) using an intuitive drag-and-drop Kanban board.
+- **Optimistic UI Updates:** Powered by **TanStack React Query**, the interface responds instantly to user actions while syncing with the database in the background.
+
+### 🎨 Premium UI/UX (Glassmorphism)
+- Built with **Tailwind CSS** and **Framer Motion**, the application features a modern "Glassmorphic" aesthetic with smooth stagger animations, backdrop blurs, and highly responsive micro-interactions.
+
+### 🛡️ Enterprise Security & Backend
+- **MySQL Database:** Fully relational database structure ensuring data integrity across Leads, Companies, and Users.
+- **Security Headers & Rate Limiting:** The Express backend is fortified with `Helmet.js` and `express-rate-limit` to prevent brute-force attacks and XSS vulnerabilities.
+- **JWT Authentication:** Secure stateless authentication for user sessions.
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+- React (Vite)
+- Tailwind CSS
+- Framer Motion (Animations)
+- TanStack React Query (State Management & Caching)
+- Recharts (Data Visualization)
+- Lucide React (Icons)
+
+**Backend:**
+- Node.js & Express
+- MySQL (via `mysql2` connection pooling)
+- Socket.io (Real-time events)
+- JSON Web Tokens (Auth)
+- Helmet & Express Rate Limit (Security)
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
+- Node.js (v16+)
+- MySQL Server running locally.
 
 ### Installation
 
-1. **Install all dependencies** (from the root directory):
+1. **Clone the repository:**
    ```bash
-   npm run install:all
+   git clone https://github.com/Bulee048/LeadFlow-CRM.git
+   cd LeadFlow-CRM
    ```
 
-2. **Set up environment variables**:
-   The server expects a `.env` file in the `/server` directory.
-   ```
-   PORT=5050
-   JWT_SECRET=leadflow_secret_key_12345
-   NODE_ENV=development
-   CURRENCY=LKR
+2. **Setup the Database:**
+   - Create a MySQL database named `leadflow_crm`.
+   - Configure the `server/.env` file:
+     ```env
+     PORT=5050
+     JWT_SECRET=your_super_secret_jwt_key
+     DB_HOST=localhost
+     DB_USER=root
+     DB_PASSWORD=root
+     DB_NAME=leadflow_crm
+     DB_PORT=3306
+     ```
+
+3. **Install Dependencies:**
+   ```bash
+   # Install Server dependencies
+   cd server
+   npm install
+
+   # Install Client dependencies
+   cd ../client
+   npm install
    ```
 
-3. **Start the application**:
+4. **Seed the Database:**
    ```bash
+   # From the server directory, populate the DB with mock data
+   node seed.js
+   ```
+
+5. **Run the Application:**
+   Open two terminals:
+   
+   **Terminal 1 (Backend):**
+   ```bash
+   cd server
    npm run dev
    ```
-   This will start both the Express server (port 5050) and the Vite frontend (port 3030) concurrently using `concurrently`.
-
-## 🔐 Test Login Credentials
-
-- **Email**: `admin@example.com`
-- **Password**: `password123`
-
-## 🗄️ Database Setup
-
-LeadFlow uses a **JSON-based persistent database** (`server/db.json`) for maximum compatibility across all environments.
-- **Zero Configuration**: The database is automatically initialized and seeded on the first run.
-- **Persistence**: All CRUD operations persist to the local file system.
-- **Mock Interface**: I implemented a custom "database interface" in the backend to mirror common SQL query patterns, making it easy to migrate to SQLite or PostgreSQL in the future.
-
-## 💡 Reflection & Product Thinking
-
-Building LeadFlow CRM was an exercise in balancing technical robustness with real-world utility. One of the most significant challenges I tackled was ensuring the app remained highly portable. I initially considered a native SQLite driver, but encountered cross-platform build issues. To pivot, I implemented a custom persistent storage layer that maintains the same API structure, demonstrating my ability to **debug independently** and prioritize **delivery and reliability**.
-
-From a product perspective, I focused on features that solve actual sales friction:
-- **Lead Context**: Instead of just a list of notes, I built a **Timeline** view because sales reps need to see the *flow* of a conversation, not just individual snippets.
-- **Prioritization**: The **Engagement Score** and **Activity Indicators** were added because a CRM's primary job isn't just storage—it's helping a user decide *who to call next*.
-
-If I were to iterate further, I would implement **Lead Enrichment APIs** (to automatically pull company data from domains) and a **Calendar Integration** for scheduling follow-ups directly within the timeline.
+   **Terminal 2 (Frontend):**
+   ```bash
+   cd client
+   npm run dev
+   ```
 
 ---
-**Nethshan Dulmin Bulegoda**
+
+## 💡 Business Value (For Business Analysts)
+LeadFlow CRM was engineered not just as a technical showcase, but as a robust business tool. 
+- The **React Query** caching strategy severely reduces database load, cutting infrastructure costs.
+- **WebSockets** eliminate "stale data" errors during multi-user collaboration.
+- The **Kanban methodology** implemented reduces sales-cycle friction and improves rep efficiency.
+- **Automated Seeding Scripts** allow for instant deployment to QA environments for rapid testing.
