@@ -1,0 +1,78 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # ==============================
+      # Root Dependencies (Husky, etc)
+      # ==============================
+      - name: Install Root Dependencies
+        run: npm ci
+
+      # ==============================
+      # Backend Pipeline
+      # ==============================
+      - name: Install Backend Dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: ./server
+        run: npx prisma generate
+
+      - name: Lint Backend
+        working-directory: ./server
+        run: npm run lint
+
+      - name: Test Backend (Jest)
+        working-directory: ./server
+        run: npm run test
+        env:
+          JWT_SECRET: testing_secret
+          # You can define a test database URL here if your tests don't mock the DB completely
+          DATABASE_URL: "mysql://root:root@localhost:3306/test_db"
+
+      - name: Build Backend (TypeScript)
+        working-directory: ./server
+        # Only run this if you have a build script in server/package.json
+        run: npm run build --if-present
+
+      # ==============================
+      # Frontend Pipeline
+      # ==============================
+      - name: Install Frontend Dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Lint Frontend
+        working-directory: ./client
+        run: npm run lint
+
+      - name: Test Frontend (Vitest)
+        working-directory: ./client
+        run: npm run test --run # --run tells vitest to run once instead of watch mode
+
+      - name: Build Frontend (Vite)
+        working-directory: ./client
+        run: npm run build

@@ -1,0 +1,10 @@
+{
+  "client/src/**/*.{ts,tsx}": [
+    "npm run lint --prefix client",
+    "prettier --write"
+  ],
+  "server/src/**/*.{ts,ts}": [
+    "npm run lint --prefix server",
+    "prettier --write"
+  ]
+}

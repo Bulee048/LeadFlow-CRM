@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - '5175:80' # Exposes Nginx on port 5175
+    depends_on:
+      - backend
+    networks:
+      - crm-network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '5050:5050'
+    environment:
+      - NODE_ENV=production
+      - PORT=5050
+      - JWT_SECRET=${JWT_SECRET:-your_super_secret_jwt_key}
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=leadflow_crm
+      - DB_PORT=3306
+      - DATABASE_URL=mysql://root:root@db:3306/leadflow_crm
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - crm-network
+
+  db:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=leadflow_crm
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crm-network
+
+volumes:
+  mysql_data:
+
+networks:
+  crm-network:
+    driver: bridge
